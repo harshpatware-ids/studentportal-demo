@@ -74,6 +74,7 @@ export function Dialog({
         className={cn(
           "relative w-full rounded-xl-card bg-white shadow-xl",
           widthClass,
+          "max-h-[90vh] overflow-y-auto",
           "transition-transform"
         )}
         style={{ animation: "sv-pop 180ms ease-out both" }}

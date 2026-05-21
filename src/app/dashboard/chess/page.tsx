@@ -667,7 +667,7 @@ function PreviewCredentialDialog({
         </div>
 
         {/* Render container — templateContent is self-contained HTML with an iframe */}
-        <div className="mt-5 rounded-xl border border-ink-200 bg-ink-50/60 overflow-hidden min-h-[480px] flex items-center justify-center">
+        <div className="mt-5 rounded-xl border border-ink-200 bg-ink-50/60 overflow-hidden flex items-center justify-center">
           {loading && (
             <div className="flex flex-col items-center gap-2 text-xs text-ink-500">
               <span className="h-5 w-5 animate-spin rounded-full border-2 border-amber-500 border-t-transparent" />
