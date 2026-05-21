@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Download, ArrowRight, ShieldCheck, Fingerprint } from "lucide-react";
+import { CheckCircle2, ArrowRight, ShieldCheck, Fingerprint, ScanLine } from "lucide-react";
 import {
   motion,
   useMotionValue,
@@ -520,30 +520,71 @@ function CredentialIssuanceModal({
   return (
     <Dialog open={open} onClose={onClose} dismissible={false}>
       <div className="p-7 flex flex-col items-center text-center">
-        <div className="h-12 w-12 rounded-full bg-emerald-100 ring-8 ring-emerald-50 flex items-center justify-center mb-3">
-          <CheckCircle2 className="h-6 w-6 text-emerald-600" />
-        </div>
-        <h2 className="text-lg font-semibold text-ink-900">Credential issued</h2>
-        <p className="mt-1.5 text-xs text-ink-500 max-w-xs">
-          Scan this QR code with your authenticator app to save your credential.
-          You&apos;ll use it to log in from now on.
-        </p>
-
-        <div className="mt-5 rounded-xl border-2 border-dashed border-brand-200 p-3.5 bg-brand-50/30">
-          <QrPanel value={invitationUrl} />
-          {credentialRef && (
-            <div className="mt-2.5 rounded-md border border-ink-200 bg-white px-3 py-1.5 font-mono text-xs text-ink-700">
-              {credentialRef}
+        {!issued ? (
+          // ─── Waiting state: show QR for the wallet to scan ───────────
+          <>
+            <div className="h-12 w-12 rounded-full bg-brand-100 ring-8 ring-brand-50 flex items-center justify-center mb-3">
+              <ScanLine className="h-6 w-6 text-brand-600" />
             </div>
-          )}
-        </div>
+            <h2 className="text-lg font-semibold text-ink-900">
+              Scan to receive your credential
+            </h2>
+            <p className="mt-1.5 text-xs text-ink-500 max-w-xs">
+              Open the e-idStack app on your phone and scan this QR to store
+              your credential. You&apos;ll use it to log in from now on.
+            </p>
 
-        {issued && (
-          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            Stored on your device
-          </div>
-        )} 
+            <div className="mt-5 rounded-xl border-2 border-dashed border-brand-200 p-3.5 bg-brand-50/30">
+              <QrPanel value={invitationUrl} />
+              {credentialRef && (
+                <div className="mt-2.5 rounded-md border border-ink-200 bg-white px-3 py-1.5 font-mono text-xs text-ink-700">
+                  {credentialRef}
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          // ─── Success state: replaces the QR once status === done ─────
+          <>
+            <motion.div
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 220, damping: 16 }}
+              className="relative h-16 w-16 rounded-full bg-emerald-100 ring-8 ring-emerald-50 flex items-center justify-center mb-4"
+            >
+              <motion.div
+                animate={{ scale: [1, 1.18, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 rounded-full bg-emerald-300/40"
+              />
+              <CheckCircle2 className="relative h-9 w-9 text-emerald-600" strokeWidth={2.25} />
+            </motion.div>
+
+            <h2 className="text-xl font-semibold text-ink-900">
+              You&apos;re all set!
+            </h2>
+            <p className="mt-2 text-sm text-ink-600 max-w-xs leading-relaxed">
+              Your credential has been issued and saved to your e-idStack wallet.
+              You can now use it to log in to StudentPortal.
+            </p>
+
+            {credentialRef && (
+              <div className="mt-5 inline-flex items-center gap-2 rounded-lg border border-emerald-100 bg-emerald-50/60 px-3 py-1.5">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                <span className="font-mono text-xs text-emerald-800">{credentialRef}</span>
+              </div>
+            )}
+
+            <Button
+              size="md"
+              onClick={onConfirmScanned}
+              className="mt-6 w-full"
+            >
+              Continue to login
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </>
+        )}
       </div>
     </Dialog>
   );
