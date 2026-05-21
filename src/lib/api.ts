@@ -265,30 +265,32 @@ export type ChessAttributes = {
   expiresAt: string;
 };
 
-const CHESS_TEMPLATE_ID = "91";
-const CHESS_DOCUMENT_KEY =
-  "e-id-templates/3a0152d8-87f7-4430-b4a9-89155ab13499-badge-3.html";
-const CHESS_ISSUER_DID = "did:indy:bcovrin:test:X4CgTcYWAxYCUJyfpPT5ck";
+/** Single source of truth for the chess template id — used by both the
+ *  preview fetch and the issuance POST. */
+export const CHESS_TEMPLATE_ID = 92;
 
 /**
  * Issue the Chess Competition (skill-badge) credential via the predefined
  * template endpoint.
  *
- *   POST /api/v1/predefined-templates/91/issue-oob
+ *   POST /api/v1/predefined-templates/{id}/issue-oob
  *   Header: x-tenant-id
  *
- * Body shape per Polyversity sample — issuerId is the schema/template author
- * DID (not the StudentPortal NEXT_PUBLIC_ISSUER_ID).
+ * Fetches the template first so `documentKey` and `issuerId` are read live
+ * from the server — no hardcoded values that can drift when the template
+ * is rotated.
  */
 export async function createChessOffer(
   attrs: ChessAttributes
 ): Promise<QrSession> {
+  const template = await getPredefinedTemplate(CHESS_TEMPLATE_ID);
+
   const body = {
     attributes: attrs,
     autoAcceptCredential: true,
     comment: "",
-    documentKey: CHESS_DOCUMENT_KEY,
-    issuerId: CHESS_ISSUER_DID,
+    documentKey: template.documentKey,
+    issuerId: template.issuerDid,
   };
 
   const res = await fetch(

@@ -23,6 +23,7 @@ import { QrPanel } from "@/components/QrPanel";
 import { UserAvatar } from "@/components/UserAvatar";
 import { useUser } from "@/store/user";
 import {
+  CHESS_TEMPLATE_ID,
   createChessOffer,
   getOfferStatus,
   getPredefinedTemplate,
@@ -30,9 +31,6 @@ import {
   isTerminalSuccess,
 } from "@/lib/api";
 import { POLL_INTERVAL_MS } from "@/lib/config";
-
-const CHESS_TEMPLATE_ID = 91;
-const CHESS_BADGE_S3_KEY = "e-id-templates/3a0152d8-87f7-4430-b4a9-89155ab13499-badge-3.html";
 
 const GAME_DURATION = 5; // seconds
 const OPPONENT_NAME = "John";
