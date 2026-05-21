@@ -225,6 +225,94 @@ export async function createProofRequest(): Promise<QrSession> {
 }
 
 /**
+ * Fetch a predefined template (e.g. the Chess Competition badge, id 91).
+ * Returns the raw `data` object — most importantly `templateContent`,
+ * a self-contained HTML snippet with the visual badge preview.
+ */
+export type PredefinedTemplate = {
+  id: number;
+  templateName: string;
+  templateContent: string;
+  documentKey?: string;
+  credDefId?: string;
+  schemaId?: string;
+  issuerDid?: string;
+  credentialType?: string;
+  params?: { fields?: string[]; required?: string[] };
+};
+
+export async function getPredefinedTemplate(
+  id: string | number
+): Promise<PredefinedTemplate> {
+  const res = await fetch(
+    `${API_BASE_URL}/api/v1/predefined-templates/${id}`,
+    { headers: headers() }
+  );
+  if (!res.ok) {
+    throw new Error(await parseError(res, "Template fetch failed"));
+  }
+  const data = await res.json();
+  return (data?.data ?? data) as PredefinedTemplate;
+}
+
+/** Chess credential attributes — match the SkillBadges/1.1 schema bound to template #91. */
+export type ChessAttributes = {
+  nameOfPerson: string;
+  nameOfCourse: string;
+  dateOfIssuance: string;
+  placeOfIssuance: string;
+  issuerName: string;
+  expiresAt: string;
+};
+
+const CHESS_TEMPLATE_ID = "91";
+const CHESS_DOCUMENT_KEY =
+  "e-id-templates/3a0152d8-87f7-4430-b4a9-89155ab13499-badge-3.html";
+const CHESS_ISSUER_DID = "did:indy:bcovrin:test:X4CgTcYWAxYCUJyfpPT5ck";
+
+/**
+ * Issue the Chess Competition (skill-badge) credential via the predefined
+ * template endpoint.
+ *
+ *   POST /api/v1/predefined-templates/91/issue-oob
+ *   Header: x-tenant-id
+ *
+ * Body shape per Polyversity sample — issuerId is the schema/template author
+ * DID (not the StudentPortal NEXT_PUBLIC_ISSUER_ID).
+ */
+export async function createChessOffer(
+  attrs: ChessAttributes
+): Promise<QrSession> {
+  const body = {
+    attributes: attrs,
+    autoAcceptCredential: true,
+    comment: "",
+    documentKey: CHESS_DOCUMENT_KEY,
+    issuerId: CHESS_ISSUER_DID,
+  };
+
+  const res = await fetch(
+    `${API_BASE_URL}/api/v1/predefined-templates/${CHESS_TEMPLATE_ID}/issue-oob`,
+    {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify(body),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(await parseError(res, "Chess credential issuance failed"));
+  }
+
+  const data = await res.json();
+  return {
+    invitationUrl: pickInvitationUrl(data),
+    requestId: pickRequestId(data),
+    raw: data,
+  };
+}
+
+/**
  * Issuance status — hit after the wallet has scanned the OOB QR to see whether
  * the credential exchange has progressed (offer-sent → request-received →
  * credential-issued → done).

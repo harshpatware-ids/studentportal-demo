@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 export default function DashboardPage() {
   const profile = useUser((s) => s.profile);
   const firstName =
-    (profile?.full_name || "John Doe").trim().split(/\s+/)[0] || "Student";
+    (profile?.full_name || "Harsh Patware").trim().split(/\s+/)[0] || "Student";
 
   return (
     <>

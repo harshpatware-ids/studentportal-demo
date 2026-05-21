@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir \"C:\\\\Users\\\\harsh\\\\Desktop\\\\student-demo\")"
+      "Bash(dir \"C:\\\\Users\\\\harsh\\\\Desktop\\\\student-demo\")",
+      "Bash(curl -s -X POST https://e-idstack-multitenant.polyversity.io/api/v1/predefined-templates/91/issue-oob -H 'accept: */*' -H 'x-tenant-id: 47a0a239-046f-404b-818f-fcf97d74df4a' -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('ok:', d.get\\('success'\\), '| state:', d.get\\('data',{}\\).get\\('credentialExchange',{}\\).get\\('state'\\), '| id:', d.get\\('data',{}\\).get\\('credentialExchange',{}\\).get\\('id'\\), '| has invitationUrl:', bool\\(d.get\\('data',{}\\).get\\('invitationUrl'\\)\\)\\)\")"
     ]
   }
 }

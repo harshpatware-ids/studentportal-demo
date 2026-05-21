@@ -16,13 +16,22 @@ export function Dialog({
   dismissible = true,
   /** Show the floating close (X) button in the top-right corner. */
   showClose = true,
+  /** Width of the dialog. Use `lg` for credential / template previews. */
+  size = "md",
 }: {
   open: boolean;
   onClose?: () => void;
   children: React.ReactNode;
   dismissible?: boolean;
   showClose?: boolean;
+  size?: "sm" | "md" | "lg" | "xl";
 }) {
+  const widthClass = {
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-2xl",
+    xl: "max-w-4xl",
+  }[size];
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -63,7 +72,8 @@ export function Dialog({
 
       <div
         className={cn(
-          "relative w-full max-w-md rounded-xl-card bg-white shadow-xl",
+          "relative w-full rounded-xl-card bg-white shadow-xl",
+          widthClass,
           "transition-transform"
         )}
         style={{ animation: "sv-pop 180ms ease-out both" }}

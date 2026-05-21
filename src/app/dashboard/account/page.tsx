@@ -46,12 +46,12 @@ export default function AccountPage() {
             <div className="flex items-center gap-4">
               <UserAvatar
                 size={72}
-                name={profile?.full_name || "Demo Student"}
+                name={profile?.full_name || "Harsh Patware"}
                 className="ring-4 ring-brand-50 shadow-sm"
               />
               <div>
                 <div className="text-lg font-semibold text-ink-900">
-                  {profile?.full_name || "Demo Student"}
+                  {profile?.full_name || "Harsh Patware"}
                 </div>
                 <div className="text-sm text-ink-500">
                   {profile?.department || "—"}

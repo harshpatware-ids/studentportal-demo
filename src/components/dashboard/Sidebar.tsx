@@ -58,10 +58,10 @@ export function Sidebar() {
 
       <div className="px-3 pb-4">
         <div className="flex items-center gap-3 rounded-lg bg-ink-50 px-3 py-2.5">
-          <UserAvatar size={32} name={profile?.full_name || "Demo Student"} />
+          <UserAvatar size={32} name={profile?.full_name || "Harsh Patware"} />
           <div className="min-w-0">
             <div className="text-xs font-semibold text-ink-900 truncate">
-              {profile?.full_name || "Demo Student"}
+              {profile?.full_name || "Harsh Patware"}
             </div>
             <div className="text-[10px] text-ink-500 truncate">
               {profile?.department || "Computer Science"}

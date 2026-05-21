@@ -1,6 +1,7 @@
 "use client";
 
-import { Bell, Mail, Moon, Search } from "lucide-react";
+import Link from "next/link";
+import { Bell, Mail, Moon, Search, Crown } from "lucide-react";
 import { useUser } from "@/store/user";
 import { UserAvatar } from "@/components/UserAvatar";
 
@@ -18,12 +19,22 @@ export function Topbar({ title }: { title: string }) {
           <span>Search…</span>
           <span className="ml-2 rounded border border-ink-200 bg-ink-50 px-1 text-[10px] font-mono">⌘K</span>
         </button>
+
+        {/* Play Chess — earn a verifiable participation credential */}
+        <Link
+          href="/dashboard/chess"
+          className="hidden md:inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-white text-xs font-semibold shadow-sm shadow-amber-200/60 ring-1 ring-amber-300/40 hover:from-amber-500 hover:to-amber-700 transition-all mr-1"
+        >
+          <Crown className="h-3.5 w-3.5" />
+          <span>Play Chess</span>
+        </Link>
+
         <IconBtn aria-label="Notifications"><Bell className="h-4 w-4" /></IconBtn>
         <IconBtn aria-label="Messages"><Mail className="h-4 w-4" /></IconBtn>
         <IconBtn aria-label="Theme"><Moon className="h-4 w-4" /></IconBtn>
         <UserAvatar
           size={36}
-          name={profile?.full_name || "Student"}
+          name={profile?.full_name || "Harsh Patware"}
           className="ml-2 ring-2 ring-white shadow-sm"
         />
       </div>
